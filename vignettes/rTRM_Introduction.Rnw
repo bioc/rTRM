@@ -381,7 +381,7 @@ m=getSimilarityMatrix(list(PWMEnrich=sox2_trm,HOMER=s))
 m
 d=as.data.frame.table(m)
 g = ggplot(d, aes(x = Var1, y = Var2, fill = Freq))
-g + geom_tile(asp = 1) + scale_fill_gradient2(limit = c(0, 100), low = "white", mid = "darkblue", high = "orange", guide = guide_legend("similarity", reverse=TRUE), midpoint = 50) + xlab(NULL) + ylab(NULL) + theme(aspect.ratio=1, axis.text.x=element_text(angle = 90, vjust = .5, hjust = 1))
+g + geom_tile() + scale_fill_gradient2(limit = c(0, 100), low = "white", mid = "darkblue", high = "orange", guide = guide_legend("similarity", reverse=TRUE), midpoint = 50) + xlab(NULL) + ylab(NULL) + theme(aspect.ratio = 1, axis.text.x=element_text(angle = 90, vjust = .5, hjust = 1))
 
 @
 
