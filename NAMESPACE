@@ -1,12 +1,31 @@
 import(igraph, RSQLite)
 
 importMethodsFrom(AnnotationDbi,
-                  "select"
-)
+                  "select")
 
 importMethodsFrom(DBI,
                   "dbDriver",
-                  "fetch"
+                  "fetch")
+
+importFrom("grDevices", "col2rgb", "colors", "grey.colors")
+importFrom(
+  "graphics",
+  "abline",
+  "legend",
+  "lines",
+  "par",
+  "plot",
+  "points",
+  "polygon",
+  "symbols",
+  "text"
 )
+importFrom("stats", "as.dist", "cor", "lm", "na.omit")
+importFrom("utils",
+           "data",
+           "download.file",
+           "read.delim",
+           "unzip",
+           "write.table")
 
 exportPattern("^[[:alpha:]]+")
