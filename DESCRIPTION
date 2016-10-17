@@ -2,7 +2,7 @@ Package: rTRM
 Type: Package
 Title: Identification of transcriptional regulatory modules from PPI
         networks
-Version: 1.11.2
+Version: 1.12.0
 Date: 2015-12-25
 Author: Diego Diez
 Depends: R (>= 2.10), igraph (>= 1.0)
