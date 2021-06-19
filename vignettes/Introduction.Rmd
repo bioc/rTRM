@@ -11,6 +11,7 @@ vignette: |
   %\VignetteIndexEntry{Introduction to rTRM}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
 ---
 
 
@@ -23,7 +24,7 @@ library(org.Mm.eg.db)
 
 # Introduction
 
-Transcription factors (TFs) bind to short motifs in the DNA and regulate the expression of target genes in a cell type and time dependent fashion. TFs do so by cooperating with other TFs in what it is called Transcriptional Regulatory Modules (TRMs). These TRMs contain different TFs and form a combinatorial code that explains TF specificity. We have implemented a method for the identification of TRMs that integrates information about binding locations from a single ChIP-seq experiment, computational estimation of TF binding, gene expression and protein-protein interaction (PPI) data (Diez et al. submitted; see workflow figure). rTRM implements the methods required for the integration of PPI information (step 4 in workflow). To do so, rTRM tries to identify TFs that are bound to a target TF (the one with experimental evidence- i.e. ChIP-seq data) either directly or through a bridge protein. This package has been used to identify cell-type independent and dependent TRMs associated with Stat3 functions @{hutchins2013}. Also, it has been used to identify TRMs in embryonic and hematopoietic stem cells as part of the publication presenting the methodology (Diez et al. submitted). Here we present the basic capabilities of rTRM with a naive example, a case study showing the identification of Sox2 related TRM in ESCs as performed in the paper describing rTRM (Diez et al. submitted), and a complete workflow in R using the PWMEnrich package for the motif enrichment step.
+Transcription factors (TFs) bind to short motifs in the DNA and regulate the expression of target genes in a cell type and time dependent fashion. TFs do so by cooperating with other TFs in what it is called Transcriptional Regulatory Modules (TRMs). These TRMs contain different TFs and form a combinatorial code that explains TF specificity. We have implemented a method for the identification of TRMs that integrates information about binding locations from a single ChIP-seq experiment, computational estimation of TF binding, gene expression and protein-protein interaction (PPI) data [@diez2014]; see workflow figure). rTRM implements the methods required for the integration of PPI information (step 4 in workflow). To do so, rTRM tries to identify TFs that are bound to a target TF (the one with experimental evidence- i.e. ChIP-seq data) either directly or through a bridge protein. This package has been used to identify cell-type independent and dependent TRMs associated with Stat3 functions [@hutchins2013]. Also, it has been used to identify TRMs in embryonic and hematopoietic stem cells as part of the publication presenting the methodology [@diez2014]. Here we present the basic capabilities of rTRM with a naive example, a case study showing the identification of Sox2 related TRM in ESCs as performed in the paper describing rTRM [@diez2014], and a complete workflow in R using the `r Biocpkg("PWMEnrich")` package for the motif enrichment step.
 
 
 ```{r fig.wide=TRUE, echo=FALSE, fig.cap="Workflow for the identification of TRMs. Steps 1-3 can be performed with standard Bioconductor approaches. rTRM implements a method to perform step 4."}
@@ -63,7 +64,7 @@ plot(s,vertex.size=20,vertex.label.cex=.8)
 
 # Introduction to the rTRM package
 
-rTRM relies on a series of optimizations. For example in the publication we used PWMs for vertebrate species compiled from different sources. This assumes the binding specificities of TFs will be conserved on all these species. Recent comparison between mouse and human PWMs suggests that this is the case for most TFs @{jolma2013}. rTRM also relies on protein-protein interaction data, and so provides utilities to download data from the BioGRID database (see below). As some of these functionalities are further integrated with existing _Bioconductor_ functionality they may be defunct in the future.
+rTRM relies on a series of optimizations. For example in the publication we used PWMs for vertebrate species compiled from different sources. This assumes the binding specificities of TFs will be conserved on all these species. Recent comparison between mouse and human PWMs suggests that this is the case for most TFs @jolma2013. rTRM also relies on protein-protein interaction data, and so provides utilities to download data from the BioGRID database (see below). As some of these functionalities are further integrated with existing _Bioconductor_ functionality they may be defunct in the future.
 
 ## Database
 
@@ -106,7 +107,7 @@ getOrthologFromMatrix("MA0009.1", organism="mouse")
 
 ## Interactome data
 
-rTRM requires information about protein-protein interactions (PPIs) for its predictions and includes interactome (PPI network) data from the BioGRID database @{stark2011}. Currently mouse and human interactomes are supported. The networks are provided as an _igraph_ object. To access the data use:
+rTRM requires information about protein-protein interactions (PPIs) for its predictions and includes interactome (PPI network) data from the BioGRID database @stark2011. Currently mouse and human interactomes are supported. The networks are provided as an _igraph_ object. To access the data use:
 
 ```{r}
 # check statistics about the network.
@@ -163,7 +164,7 @@ V(biogrid_hs)$label <- select(org.Hs.eg.db,keys=V(biogrid_hs)$name,columns=c("SY
 
 # Case study: TRM associated with Sox2 in embryonic stem cells (ESCs)
 
-Sox2 is a TF involved in the determination and maintainance of pluripotency in embryonic stem cells (ESCs). Sox2 forms a transcriptional regulatory module with Nanog and Pou5f1 (Oct4), and together determine ESCs phenotype. Other TFs important to this process are Erssb and Klf4. In this case study we want to identify TRMs associated with Sox2. ChIP-seq data for Sox2 was obtained from Chen et al. (Cell 2008) @{chen2008} and motif enrichment analysis performed with HOMER @{heinz2010}, followed by matching against our library of PWMs using TOMTOM @{gupta2007}. The starting dataset is the TOMTOM output file with the motifs enriched in the Sox2 binding regions.
+Sox2 is a TF involved in the determination and maintainance of pluripotency in embryonic stem cells (ESCs). Sox2 forms a transcriptional regulatory module with Nanog and Pou5f1 (Oct4), and together determine ESCs phenotype. Other TFs important to this process are Erssb and Klf4. In this case study we want to identify TRMs associated with Sox2. ChIP-seq data for Sox2 was obtained from @chen2008 and motif enrichment analysis performed with HOMER @heinz2010, followed by matching against our library of PWMs using TOMTOM @gupta2007. The starting dataset is the TOMTOM output file with the motifs enriched in the Sox2 binding regions.
 
 ```{r}
 # read motif enrichment results.
@@ -183,7 +184,7 @@ length(tfs_list)
 head(tfs_list)
 ```
 
-Next, we need a list of genes expressed in ESC. For this, the dataset was obtained from GEO (GSE27708; @{ho2011})  and processed using the custom CDFs from the BrainArray project @{dai2005} and the `rma` function from the package `r Biocpkg("affy")` @{gautier2004}. Genes not expressed were filtered by removing all genes with log2 expression < 5 in all samples.
+Next, we need a list of genes expressed in ESC. For this, the dataset was obtained from GEO (GSE27708; @ho2011)  and processed using the custom CDFs from the BrainArray project @dai2005 and the `rma` function from the package `r Biocpkg("affy")` @gautier2004. Genes not expressed were filtered by removing all genes with log2 expression < 5 in all samples.
 
 ```{r}
 # load expression data.
@@ -294,7 +295,7 @@ pwm_logn <- makeBackground(p, Mmusculus, type = "logn")
 load(system.file("extra/pwm_mm_logn.rda", package = "rTRM"))
 ```
 
-Next we read the peak information from the Sox2 Chip-seq data. This is the original coordinates obtained from Chen et al. (Cell 2008), which were obtained for Mmusculus mm8 genome. The function getSequencesFromGenome() is an utility wrapper to getSeq() that facilitates appending a label to the sequences' ids. PWMEnrich requires sequences the same size or longer to the motifs so we check what is the largest motif and filter the sequences accordingly.
+Next we read the peak information from the Sox2 Chip-seq data. This is the original coordinates obtained from @chen2008, which were obtained for Mus musculus (mm8) genome. The function getSequencesFromGenome() is an utility wrapper to getSeq() that facilitates appending a label to the sequences' ids. PWMEnrich requires sequences the same size or longer to the motifs so we check what is the largest motif and filter the sequences accordingly.
 
 
 ```{r}
@@ -427,22 +428,3 @@ sessionInfo()
 
 # References
 
-#\bibitem{hutchins2013} Hutchins, A. P., D. Diez, et al. (2013). "Distinct transcriptional regulatory modules underlie STAT3's cell type-independent and cell type-specific functions." Nucleic Acids Res.
-
-#\bibitem{stark2011} Stark, C., B. J. Breitkreutz, et al. (2011). "The BioGRID Interaction Database: 2011 update." Nucleic Acids Res 39(Database issue): D698-704.
-
-#\bibitem{chen2008} Chen, X., H. Xu, et al. (2008). "Integration of external signaling pathways with the core transcriptional network in embryonic stem cells." Cell 133(6): 1106-1117.
-
-#\bibitem{heinz2010} Heinz, S., C. Benner, et al. (2010). "Simple combinations of lineage-determining transcription factors prime cis-regulatory elements required for macrophage and B cell identities." Mol Cell 38(4): 576-589.
-
-#\bibitem{gupta2007} Gupta, S., J. A. Stamatoyannopoulos, et al. (2007). "Quantifying similarity between motifs." Genome Biol 8(2): R24.
-
-#\bibitem{ho2011} Ho, L., E. L. Miller, et al. (2011). "esBAF facilitates pluripotency by conditioning the genome for LIF/STAT3 signalling and by regulating polycomb function." Nat Cell Biol 13(8): 903-913.
-
-#\bibitem{dai2005} Dai, M., P. Wang, et al. (2005). "Evolving gene/transcript definitions significantly alter the interpretation of GeneChip data." Nucleic Acids Res 33(20): e175.
-
-#\bibitem{gautier2004} Gautier, L., L. Cope, et al. (2004). "affy--analysis of Affymetrix GeneChip data at the probe level." Bioinformatics 20(3): 307-315.
-
-#\bibitem{jolma2013} Jolma, A., Yan, J., Whitington, T., Toivonen, J., Nitta, K. R., Rastas, P., et al. (2013). DNA-Binding Specificities of Human Transcription Factors. Cell, 152(1-2), 327–339.
-
-#%\bibitem{durinck2009} Durinck, S., P. T. Spellman, et al. (2009). "Mapping identifiers for the integration of genomic datasets with the R/Bioconductor package biomaRt." Nat Protoc 4(8): 1184-1191.
