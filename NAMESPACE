@@ -8,6 +8,7 @@ importMethodsFrom(DBI,
                   "fetch")
 
 importFrom("grDevices", "col2rgb", "colors", "grey.colors")
+importFrom("methods", "is")
 importFrom(
   "graphics",
   "abline",

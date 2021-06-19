@@ -137,13 +137,12 @@ annotateTRM = function(g, target) {
   else
     default
 }
-
 plotTRM = function(g, layout = layout.fruchterman.reingold, mar = .5, vertex.col, vertex.cex, vertex.lwd, edge.col, edge.lwd, edge.lty, label = TRUE, label.cex, label.col, label.pos = NULL, label.offset = 1.5, adjust.label.col = FALSE, normalize.layout=TRUE) {
   
-  if(class(layout) == "function")
+  if(is(layout, "function"))
     l = layout(g)
   else
-    l = layout
+    l = as.matrix(layout)
 
   # normalize layout.
   if(normalize.layout)
